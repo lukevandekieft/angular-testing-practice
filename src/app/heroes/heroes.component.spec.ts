@@ -1,5 +1,7 @@
+import { Component, Input } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { of } from "rxjs";
+import { Hero } from "../hero";
 import { HeroService } from "../hero.service";
 import { HeroesComponent } from "./heroes.component"
 
@@ -10,6 +12,14 @@ describe('HeroesComponent', () => {
   let fixture: ComponentFixture<HeroesComponent>;
   let heroes;
   let mockHeroService: jasmine.SpyObj<HeroService>;
+
+  @Component({
+    selector: 'app-hero',
+    template: '<div></div>'
+  })
+  class MockHeroComponent {
+    @Input() hero: Hero;
+  }
 
   beforeEach(() => {
     heroes = [
@@ -49,7 +59,10 @@ describe('HeroesComponent', () => {
     beforeEach(() => {
       // component allows us to test HeroesComponent in isolation. This one allows for shallow testing
       TestBed.configureTestingModule({
-        declarations: [HeroesComponent],
+        declarations: [
+          HeroesComponent,
+          MockHeroComponent
+        ],
         providers: [{ provide: HeroService, useValue: mockHeroService}]
       })
       fixture = TestBed.createComponent(HeroesComponent);
