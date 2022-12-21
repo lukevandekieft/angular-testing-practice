@@ -18,8 +18,16 @@ describe('HeroComponent', () => {
   })
 
   it('should have the correct hero', () => {
-    fixture.componentInstance.hero = { id: 1, name: 'Mock Hero', strength: 3}
-    fixture.detectChanges();
+    fixture.componentInstance.hero = { id: 1, name: 'Mock Hero', strength: 3};
+
     expect(fixture.componentInstance.hero.name).toEqual('Mock Hero');
+  })
+
+  it('should render the hero name in a tag', () => {
+    fixture.componentInstance.hero = { id: 1, name: 'Mock Hero', strength: 3};
+    // detect changes is mandatory so that the HTML is rendered
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('a').textContent).toContain('Mock Hero');
   })
 })
