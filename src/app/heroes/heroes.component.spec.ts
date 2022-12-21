@@ -54,5 +54,12 @@ describe('HeroesComponent', () => {
       })
       fixture = TestBed.createComponent(HeroesComponent);
     })
+
+    it('should set heroes correctly from the service', () => {
+      mockHeroService.getHeroes.and.returnValue(of(heroes));
+      fixture.detectChanges(); // <-- unit test fails without! Doesn't know what instance is
+
+      expect(fixture.componentInstance.heroes.length).toEqual(3);
+    })
   })
 })
