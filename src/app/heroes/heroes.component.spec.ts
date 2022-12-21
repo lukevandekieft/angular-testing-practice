@@ -1,5 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
 import { of } from "rxjs";
 import { Hero } from "../hero";
 import { HeroService } from "../hero.service";
@@ -73,6 +74,13 @@ describe('HeroesComponent', () => {
       fixture.detectChanges(); // <-- unit test fails without! Doesn't know what instance is
 
       expect(fixture.componentInstance.heroes.length).toEqual(3);
+    })
+
+    it('should create one li for each hero', () => {
+      mockHeroService.getHeroes.and.returnValue(of(heroes));
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.queryAll(By.css('li')).length).toEqual(3);
     })
   })
 })
