@@ -2,6 +2,8 @@ import { of } from "rxjs";
 import { HeroService } from "../hero.service";
 import { HeroesComponent } from "./heroes.component"
 
+// These are examples of ISOLATED tests
+
 describe('HeroesComponent', () => {
   let component: HeroesComponent;
   let heroes;
