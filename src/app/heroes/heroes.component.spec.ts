@@ -1,12 +1,10 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 import { of } from "rxjs";
 import { Hero } from "../hero";
 import { HeroService } from "../hero.service";
 import { HeroesComponent } from "./heroes.component"
-
-// These are examples of ISOLATED tests
 
 describe('HeroesComponent', () => {
   let component: HeroesComponent;
@@ -81,6 +79,27 @@ describe('HeroesComponent', () => {
       fixture.detectChanges();
 
       expect(fixture.debugElement.queryAll(By.css('li')).length).toEqual(3);
+    })
+  })
+
+  describe('deep tests', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          HeroesComponent,
+          HeroesComponent
+        ],
+        providers: [{ provide: HeroService, useValue: mockHeroService}],
+        schemas: [NO_ERRORS_SCHEMA]
+      })
+      fixture = TestBed.createComponent(HeroesComponent);
+      mockHeroService.getHeroes.and.returnValue(of(heroes));
+      fixture.detectChanges();
+      // let's just do this here - we want detection on ALL deep tests
+    })
+
+    it('should be true', () => {
+      expect(true).toEqual(true);
     })
   })
 })
