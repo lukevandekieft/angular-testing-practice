@@ -4,6 +4,7 @@ import { By } from "@angular/platform-browser";
 import { of } from "rxjs";
 import { Hero } from "../hero";
 import { HeroService } from "../hero.service";
+import { HeroComponent } from "../hero/hero.component";
 import { HeroesComponent } from "./heroes.component"
 
 describe('HeroesComponent', () => {
@@ -87,7 +88,7 @@ describe('HeroesComponent', () => {
       TestBed.configureTestingModule({
         declarations: [
           HeroesComponent,
-          HeroesComponent
+          HeroComponent
         ],
         providers: [{ provide: HeroService, useValue: mockHeroService}],
         schemas: [NO_ERRORS_SCHEMA]
@@ -98,8 +99,15 @@ describe('HeroesComponent', () => {
       // let's just do this here - we want detection on ALL deep tests
     })
 
-    it('should be true', () => {
-      expect(true).toEqual(true);
+    it('should render each hero as a HeroComponent', () => {
+      // In Angular a custom component is actually a directive. remember <HeroComponent> isn't real
+      const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent))
+
+      expect(heroComponents.length).toEqual(3);
+
+      for(let i=0; i < heroComponents.length; i++) {
+        expect(heroComponents[i].componentInstance.hero.name).toEqual(heroes[i].name);
+      }
     })
   })
 })
