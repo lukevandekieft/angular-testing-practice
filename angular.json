@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "test2": {
+    "angular-testing-practice": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -141,5 +141,5 @@
       }
     }
   },
-  "defaultProject": "test2"
+  "defaultProject": "angular-testing-practice"
 }

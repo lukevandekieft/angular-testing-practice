@@ -1,12 +1,13 @@
 {
-  "name": "angular-io-example",
+  "name": "angular-testing-practice",
   "version": "1.0.0",
   "private": true,
   "description": "Example project from an angular.io guide.",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "test": "ng test"
+    "test": "ng test",
+    "lint-fix": "ng lint angular-testing-practice --fix"
   },
   "keywords": [],
   "author": "",
