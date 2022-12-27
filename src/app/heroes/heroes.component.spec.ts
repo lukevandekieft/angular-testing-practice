@@ -109,9 +109,10 @@ describe('HeroesComponent', () => {
         expect(heroComponents[i].componentInstance.hero.name).toEqual(heroes[i].name);
       }
     })
-
+    
+    // Here we are testing directly through our knowledge of the HTML. Compare to deep test #3
     it(`should call heroService.deleteHero when the Hero Component's
-      delete button is clicked`, () => {
+      delete button is clicked (HTML CHECK)`, () => {
         spyOn(fixture.componentInstance, 'delete');
 
         const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
@@ -119,6 +120,17 @@ describe('HeroesComponent', () => {
           .triggerEventHandler('click', {stopPropagation: () => {}});
 
         expect(fixture.componentInstance.delete).toHaveBeenCalledWith(heroes[0]);
+    })
+
+    // Here we are actually making the child component emit something, which the parent catches
+    it(`should call heroService.deleteHero when the Hero Component's
+      delete button is clicked (CODE CHECK)`, () => {
+      spyOn(fixture.componentInstance, 'delete');
+
+      const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+      heroComponents[0].componentInstance.delete.emit(undefined);
+
+      expect(fixture.componentInstance.delete).toHaveBeenCalledWith(heroes[0]);
     })
   })
 })
