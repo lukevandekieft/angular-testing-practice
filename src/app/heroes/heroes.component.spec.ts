@@ -101,13 +101,24 @@ describe('HeroesComponent', () => {
 
     it('should render each hero as a HeroComponent', () => {
       // In Angular a custom component is actually a directive. remember <HeroComponent> isn't real
-      const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent))
+      const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
 
       expect(heroComponents.length).toEqual(3);
 
       for(let i=0; i < heroComponents.length; i++) {
         expect(heroComponents[i].componentInstance.hero.name).toEqual(heroes[i].name);
       }
+    })
+
+    it(`should call heroService.deleteHero when the Hero Component's
+      delete button is clicked`, () => {
+        spyOn(fixture.componentInstance, 'delete');
+
+        const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+        heroComponents[0].query(By.css('button'))
+          .triggerEventHandler('click', {stopPropagation: () => {}});
+
+        expect(fixture.componentInstance.delete).toHaveBeenCalledWith(heroes[0]);
     })
   })
 })
