@@ -132,5 +132,18 @@ describe('HeroesComponent', () => {
 
       expect(fixture.componentInstance.delete).toHaveBeenCalledWith(heroes[0]);
     })
+
+    // Here we manually triggering an event handler called 'delete'.
+    // This is easy and straightforward but keep in mind this will work even if the child lacks 
+    // the requisite emitter (e.g. we can call 'fakeEmitter' and it will still work)
+    it(`should call heroService.deleteHero when the Hero Component's
+    delete button is clicked (CODE CHECK)`, () => {
+      spyOn(fixture.componentInstance, 'delete');
+
+      const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+      heroComponents[0].triggerEventHandler('delete', null);
+
+      expect(fixture.componentInstance.delete).toHaveBeenCalledWith(heroes[0]);
+    })
   })
 })
