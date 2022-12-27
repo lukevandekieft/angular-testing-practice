@@ -112,7 +112,7 @@ describe('HeroesComponent', () => {
     
     // Here we are testing directly through our knowledge of the HTML. Compare to deep test #3
     it(`should call heroService.deleteHero when the Hero Component's
-      delete button is clicked (HTML CHECK)`, () => {
+      delete button is clicked (HTML EVENT TRIGGER)`, () => {
         spyOn(fixture.componentInstance, 'delete');
 
         const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
@@ -124,7 +124,7 @@ describe('HeroesComponent', () => {
 
     // Here we are actually making the child component emit something, which the parent catches
     it(`should call heroService.deleteHero when the Hero Component's
-      delete button is clicked (CODE CHECK)`, () => {
+      delete button is clicked (CHILD EVENT TRIGGER)`, () => {
       spyOn(fixture.componentInstance, 'delete');
 
       const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
@@ -137,13 +137,28 @@ describe('HeroesComponent', () => {
     // This is easy and straightforward but keep in mind this will work even if the child lacks 
     // the requisite emitter (e.g. we can call 'fakeEmitter' and it will still work)
     it(`should call heroService.deleteHero when the Hero Component's
-    delete button is clicked (CODE CHECK)`, () => {
+    delete button is clicked (MANUAL EVENT TRIGGER)`, () => {
       spyOn(fixture.componentInstance, 'delete');
 
       const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
       heroComponents[0].triggerEventHandler('delete', null);
 
       expect(fixture.componentInstance.delete).toHaveBeenCalledWith(heroes[0]);
+    })
+
+    it('should add a new hero to the heroList when the add button is clicked', () => {
+      const name = "Mr. Ice";
+      mockHeroService.addHero.and.returnValue(of({id: 5, name: name, strength: 4}));
+      // 'nativeElement' gets us the underlying DOM element rather than the debugElement
+      const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+      const addButton = fixture.debugElement.queryAll(By.css('button'))[0];
+
+      inputElement.value = name;
+      addButton.triggerEventHandler('click', null);
+      // even though we already called detectChanges above, we need to retrigger to show new HTML?
+      fixture.detectChanges();
+      const heroText = fixture.debugElement.query(By.css('ul')).nativeElement.textContent;
+      expect(heroText).toContain(name);
     })
   })
 })
