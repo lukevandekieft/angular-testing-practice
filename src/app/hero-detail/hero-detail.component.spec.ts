@@ -38,4 +38,17 @@ describe('HeroDetail', () => {
 
     expect(fixture.nativeElement.querySelector('h2').textContent).toContain('GANDHI');
   })
+
+  // 'done' is telling Jasmine to explicitly wait (async) until we call the 'done' ourselves
+  it('should call updateHero when saveAsync is called', (done) => {
+    mockHeroService.updateHero.and.returnValue(of({}));
+    fixture.detectChanges();
+
+    fixture.componentInstance.saveAsync();
+
+    setTimeout(() => {
+      expect(mockHeroService.updateHero).toHaveBeenCalled();
+      done();
+    }, 300)
+  })
 })
