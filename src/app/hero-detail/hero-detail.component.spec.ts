@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, flush, TestBed, tick } from "@angular/core/testing"
+import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from "@angular/core/testing"
 import { FormsModule } from "@angular/forms"
 import { ActivatedRoute } from "@angular/router"
 import { of } from "rxjs"
@@ -41,7 +41,7 @@ describe('HeroDetail', () => {
 
   // 'done' is telling Jasmine to explicitly wait (async) until we call the 'done' ourselves
   // this works with the live call/set timeout, but also actually makes us wait...
-  it('should call updateHero when saveAsync is called (ASYNC)', (done) => {
+  it('should call updateHero when saveAsync is called (async)', (done) => {
     mockHeroService.updateHero.and.returnValue(of({}));
     fixture.detectChanges();
 
@@ -54,7 +54,7 @@ describe('HeroDetail', () => {
   })
 
   // This mocks out the async method so we don't actually have to wait
-  it('should call updateHero when saveAsync is called (FAKEASYNC TICK)', fakeAsync(() => {
+  it('should call updateHero when saveAsync is called (fakeAsync tick)', fakeAsync(() => {
     mockHeroService.updateHero.and.returnValue(of({}));
     fixture.detectChanges();
 
@@ -65,7 +65,7 @@ describe('HeroDetail', () => {
     expect(mockHeroService.updateHero).toHaveBeenCalled();
   }))
 
-    it('should call updateHero when saveAsync is called (FAKEASYNC FLUSH)', fakeAsync(() => {
+    it('should call updateHero when saveAsync is called (fakeAsync flush)', fakeAsync(() => {
       mockHeroService.updateHero.and.returnValue(of({}));
       fixture.detectChanges();
   
@@ -74,5 +74,18 @@ describe('HeroDetail', () => {
       flush();
   
       expect(mockHeroService.updateHero).toHaveBeenCalled();
+    }))
+
+    // waitForAsync is good for promises/3rd party APIs, in general opt for the other types
+    it('should call updateHero when savePromise is called (waitForAsync)', waitForAsync(() => {
+      mockHeroService.updateHero.and.returnValue(of({}));
+      fixture.detectChanges();
+  
+      fixture.componentInstance.savePromise();
+  
+      // whenStable is a promise that waits for internal promises to complete
+      fixture.whenStable().then(() => {
+        expect(mockHeroService.updateHero).toHaveBeenCalled();
+      })
     }))
 })

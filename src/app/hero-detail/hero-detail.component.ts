@@ -46,6 +46,13 @@ export class HeroDetailComponent implements OnInit {
       .subscribe(() => this.goBack());
     }, 250, false)();
   }
+
+  savePromise(): void {
+    fakeApiPromise().then(() => {
+      this.heroService.updateHero(this.hero)
+      .subscribe(() => this.goBack());
+    })
+  }
 }
 
 function debounce(func, wait, immediate) {
@@ -61,4 +68,10 @@ function debounce(func, wait, immediate) {
     timeout = setTimeout(later, wait);
     if(callNow) func.apply(context, args);
   }
+}
+
+function fakeApiPromise() {
+  return new Promise((resolve) => {
+    resolve(null);
+  })
 }
