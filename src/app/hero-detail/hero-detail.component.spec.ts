@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing"
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from "@angular/core/testing"
 import { FormsModule } from "@angular/forms"
 import { ActivatedRoute } from "@angular/router"
 import { of } from "rxjs"
@@ -40,7 +40,8 @@ describe('HeroDetail', () => {
   })
 
   // 'done' is telling Jasmine to explicitly wait (async) until we call the 'done' ourselves
-  it('should call updateHero when saveAsync is called', (done) => {
+  // this works with the live call/set timeout, but also actually makes us wait...
+  it('should call updateHero when saveAsync is called (ASYNC)', (done) => {
     mockHeroService.updateHero.and.returnValue(of({}));
     fixture.detectChanges();
 
@@ -51,4 +52,27 @@ describe('HeroDetail', () => {
       done();
     }, 300)
   })
+
+  // This mocks out the async method so we don't actually have to wait
+  it('should call updateHero when saveAsync is called (FAKEASYNC TICK)', fakeAsync(() => {
+    mockHeroService.updateHero.and.returnValue(of({}));
+    fixture.detectChanges();
+
+    fixture.componentInstance.saveAsync();
+    //  tick forces 250ms forward, which exhausts all our async
+    tick(250);
+
+    expect(mockHeroService.updateHero).toHaveBeenCalled();
+  }))
+
+    it('should call updateHero when saveAsync is called (FAKEASYNC FLUSH)', fakeAsync(() => {
+      mockHeroService.updateHero.and.returnValue(of({}));
+      fixture.detectChanges();
+  
+      fixture.componentInstance.saveAsync();
+      // flush is like tick(???). It says "however long we have to wait, fast forward til it's over"
+      flush();
+  
+      expect(mockHeroService.updateHero).toHaveBeenCalled();
+    }))
 })
