@@ -146,6 +146,7 @@ describe('HeroesComponent', () => {
       expect(fixture.componentInstance.delete).toHaveBeenCalledWith(heroes[0]);
     })
 
+    // Tests that input and button click display HTML
     it('should add a new hero to the heroList when the add button is clicked', () => {
       const name = "Mr. Ice";
       mockHeroService.addHero.and.returnValue(of({id: 5, name: name, strength: 4}));
